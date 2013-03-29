@@ -3,9 +3,10 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path');
+var express  = require('express')
+  , http     = require('http')
+  , xmpp     = require('simple-xmpp')
+  , path     = require('path');
 
 var app = express();
 
@@ -27,6 +28,25 @@ if ('development' == app.get('env')) {
 
 app.get('/', function(req, res){
   res.render('index', { title: 'Express' });
+});
+
+xmpp.on('online', function() {
+  console.log('Yes, I\'m connected!');
+});
+
+xmpp.on('chat', function(from, message) {
+  xmpp.send(from, 'echo: ' + message);
+});
+
+xmpp.on('error', function(err) {
+  console.error(err);
+});
+
+xmpp.connect({
+  jid      : process.env.JABBER_NAME,
+  password : process.env.JABBER_PASSWORD,
+  host     : 'talk.google.com',
+  port     : 5222
 });
 
 http.createServer(app).listen(app.get('port'), function(){
