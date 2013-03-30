@@ -6,7 +6,29 @@
 var express  = require('express')
   , http     = require('http')
   , xmpp     = require('simple-xmpp')
+  , passport = require('passport')
+  , WindowsLiveStrategy = require('passport-windowslive').Strategy
   , path     = require('path');
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new WindowsLiveStrategy({
+    clientID: process.env.WINDOWS_LIVE_CLIENT_ID,
+    clientSecret: process.env.WINDOWS_LIVE_CLIENT_SECRET,
+    callbackURL: 'http://bot.pomeo.ru/auth/windowslive/callback'
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      return done(null, profile);
+    });
+  }
+));
 
 var app = express();
 
@@ -18,6 +40,9 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.cookieParser(process.env.SECRET));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -27,7 +52,26 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res){
-  res.render('index', { title: 'Express' });
+  console.log(req.user);
+  res.render('index', { user: req.user });
+});
+
+app.get('/auth/windowslive',
+  passport.authenticate('windowslive', { scope: ['wl.signin', 'wl.basic', 'wl.calendars', 'wl.events_create'] }),
+  function(req, res){
+  }
+);
+
+app.get('/auth/windowslive/callback',
+  passport.authenticate('windowslive', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/');
+  }
+);
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 xmpp.on('online', function() {
@@ -52,3 +96,10 @@ xmpp.connect({
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
