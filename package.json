@@ -11,6 +11,7 @@
     "node-stringprep": "*",
     "simple-xmpp": "0.1.13",
     "passport": "*",
-    "passport-windowslive": "*"
+    "passport-windowslive": "*",
+    "connect-redis": "*"
   }
 }

@@ -5,6 +5,7 @@
 
 var express  = require('express')
   , http     = require('http')
+  , RedisStore = require('connect-redis')(express)
   , xmpp     = require('simple-xmpp')
   , passport = require('passport')
   , WindowsLiveStrategy = require('passport-windowslive').Strategy
@@ -41,6 +42,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(process.env.SECRET));
+app.use(express.session({store: new RedisStore({host:'redis.robo38.com', port:6379, pass:''})}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
@@ -52,7 +54,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res){
-  console.log(req.user);
+  console.log(req);
   res.render('index', { user: req.user });
 });
 
