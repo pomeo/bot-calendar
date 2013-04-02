@@ -11,14 +11,6 @@ var express  = require('express')
   , WindowsLiveStrategy = require('passport-windowslive').Strategy
   , path     = require('path');
 
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
 passport.use(new WindowsLiveStrategy({
     clientID: process.env.WINDOWS_LIVE_CLIENT_ID,
     clientSecret: process.env.WINDOWS_LIVE_CLIENT_SECRET,
