@@ -9,7 +9,17 @@ var express  = require('express')
   , xmpp     = require('simple-xmpp')
   , passport = require('passport')
   , WindowsLiveStrategy = require('passport-windowslive').Strategy
+  , rest = require('restler')
+  , token
   , path     = require('path');
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 passport.use(new WindowsLiveStrategy({
     clientID: process.env.WINDOWS_LIVE_CLIENT_ID,
@@ -18,6 +28,7 @@ passport.use(new WindowsLiveStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
+      token = accessToken;
       return done(null, profile);
     });
   }
@@ -46,8 +57,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res){
-  console.log(req);
-  res.render('index', { user: req.user });
+  res.send('It works!');
 });
 
 app.get('/auth/windowslive',
@@ -63,17 +73,15 @@ app.get('/auth/windowslive/callback',
   }
 );
 
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
-
 xmpp.on('online', function() {
   console.log('Yes, I\'m connected!');
 });
 
 xmpp.on('chat', function(from, message) {
-  xmpp.send(from, 'echo: ' + message);
+  if (from === 'me@sovechkin.com') {
+    var rePattern = new RegExp(/^(\d{2}).(\d{2}).(\d{2})\|([\w\sа-яА-Я\.\,\:\;]{1,255})\|([\w\W]{1,32768})$/);
+    var msgmatch = message.match(rePattern);
+  }
 });
 
 xmpp.on('error', function(err) {

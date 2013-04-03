@@ -12,6 +12,7 @@
     "simple-xmpp": "0.1.13",
     "passport": "*",
     "passport-windowslive": "*",
-    "connect-redis": "*"
+    "connect-redis": "*",
+    "restler": "*"
   }
 }
