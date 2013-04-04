@@ -81,6 +81,9 @@ xmpp.on('chat', function(from, message) {
   if (from === 'me@sovechkin.com') {
     var rePattern = new RegExp(/^(\d{2}).(\d{2}).(\d{2})\|([\w\sа-яА-Я\.\,\:\;]{1,255})\|([\w\W]{1,32768})$/);
     var msgmatch = message.match(rePattern);
+    if (msgmatch) {
+      if ((msgmatch[1] <= 0)||(msgmatch[1] >= 32)) {
+        xmpp.send(from, 'day error');
   }
 });
 
