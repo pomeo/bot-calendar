@@ -84,6 +84,8 @@ xmpp.on('chat', function(from, message) {
     if (msgmatch) {
       if ((msgmatch[1] <= 0)||(msgmatch[1] >= 32)) {
         xmpp.send(from, 'day error');
+      } else if ((msgmatch[2] <= 0)||(msgmatch[2] >= 13)) {
+        xmpp.send(from, 'month error');
   }
 });
 
