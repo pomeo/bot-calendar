@@ -86,6 +86,20 @@ xmpp.on('chat', function(from, message) {
         xmpp.send(from, 'day error');
       } else if ((msgmatch[2] <= 0)||(msgmatch[2] >= 13)) {
         xmpp.send(from, 'month error');
+      } else {
+        rest.post('https://apis.live.net/v5.0/me/events?access_token='+token, {
+          headers: { 'accept-encoding': 'gzip' },
+          data:    {
+            name: msgmatch[4],
+            description : msgmatch[5],
+            is_all_day_event: true,
+            visibility: 'private',
+            start_time: '20'+msgmatch[3]+'-'+msgmatch[2]+'-'+msgmatch[1]+'T00:00:00+0400'
+          }
+        }).on('complete', function(data, response) {
+
+        });
+      }
   }
 });
 
