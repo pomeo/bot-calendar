@@ -97,7 +97,13 @@ xmpp.on('chat', function(from, message) {
             start_time: '20'+msgmatch[3]+'-'+msgmatch[2]+'-'+msgmatch[1]+'T00:00:00+0400'
           }
         }).on('complete', function(data, response) {
-
+          if (response.statusCode === 201) {
+            xmpp.send(from, 'done');
+          } else if (response.statusCode === 401) {
+            xmpp.send(from, 'need login');
+          } else {
+            xmpp.send(from, 'status: ' + response.statusCode);
+          }
         });
       }
   }
