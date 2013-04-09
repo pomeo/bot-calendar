@@ -108,6 +108,8 @@ xmpp.on('chat', function(from, message) {
       }
     } else if (message === 'help') {
       xmpp.send(from, 'dd.mm.yyyy|title|description - sample: 21.12.13|name|some description\nlogin  - url for authorization\nlogout - end session\nhelp   - this message');
+    } else if (message === 'login') {
+      xmpp.send(from, 'http://' + process.env.BOT_URL + '/auth/windowslive');
   }
 });
 
