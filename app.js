@@ -113,6 +113,9 @@ xmpp.on('chat', function(from, message) {
     } else if (message === 'logout') {
       req.logout();
       xmpp.send(from, 'exit');
+    } else {
+      xmpp.send(from, 'send \'help\'');
+    }
   }
 });
 
