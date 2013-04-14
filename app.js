@@ -47,7 +47,6 @@ app.use(express.session({store: new RedisStore({host:'redis.robo38.com', port:63
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
