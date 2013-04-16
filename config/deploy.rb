@@ -16,8 +16,8 @@ set :scm,         :git
 set :copy_exclude,["/.git/", "/.gitignore", "/Capfile", "/config/", "/config.yaml", "/Rakefile", "Rules", "/tmp/", "/mkmf.log"]
 
 set :supervisord_pidfile, "/var/run/supervisord.pid"
-set :supervisord_start_group, "sovechkin"
-set :supervisord_stop_group, "sovechkin"
+set :supervisord_start_group, "botcal"
+set :supervisord_stop_group, "botcal"
 #========================
 #ROLES
 #========================
