@@ -96,6 +96,7 @@ xmpp.on('chat', function(from, message) {
         }).on('complete', function(data, response) {
           if (response.statusCode === 201) {
             xmpp.send(from, 'done');
+            req.logout();
           } else if (response.statusCode === 401) {
             xmpp.send(from, 'need login');
           } else {
@@ -108,8 +109,8 @@ xmpp.on('chat', function(from, message) {
     } else if (message === 'login') {
       xmpp.send(from, 'http://' + process.env.BOT_URL + '/auth/windowslive');
     } else if (message === 'logout') {
-      req.logout();
       xmpp.send(from, 'exit');
+      req.logout();
     } else {
       xmpp.send(from, 'send \'help\'');
     }
