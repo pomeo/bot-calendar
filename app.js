@@ -93,7 +93,7 @@ xmpp.on('chat', function(from, message) {
             visibility: 'private',
             start_time: '20'+msgmatch[3]+'-'+msgmatch[2]+'-'+msgmatch[1]+'T00:00:00+0400'
           }
-        }).on('complete', function(data, response) {
+        }).once('complete', function(data, response) {
           if (response.statusCode === 201) {
             xmpp.send(from, 'done');
             req.logout();
