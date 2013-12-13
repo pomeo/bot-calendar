@@ -91,7 +91,7 @@ xmpp.on('chat', function(from, message) {
             description : msgmatch[5],
             is_all_day_event: true,
             visibility: 'private',
-            start_time: '20'+msgmatch[3]+'-'+msgmatch[2]+'-'+msgmatch[1]+'T00:00:00+0400'
+            start_time: '20'+msgmatch[3]+'-'+msgmatch[2]+'-'+msgmatch[1]+'T12:00:00+0400'
           }
         }).once('complete', function(data, response) {
           if (response.statusCode === 201) {
